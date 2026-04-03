@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cooking</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+<style>
+* { font-family: 'Poppins', sans-serif; }
+body, html { margin: 0; padding: 0; min-height: 100vh; }
+
+body {
+  background: linear-gradient(135deg, rgba(43,16,85,0.85), rgba(28,5,34,0.85)),
+              url('https://c8.alamy.com/comp/2G2586P/creative-chef-hat-logo-vector-design-illustration-template-2G2586P.jpg') center/cover no-repeat;
+  display: flex;
+  justify-content: center;
+  padding: 30px 0;
+  color:#fff;
+}
+
+.container { max-width: 700px; margin: auto; padding-top: 30px; }
+
+.step-card {
+  background: rgba(255,255,255,0.14);
+  backdrop-filter: blur(20px);
+  border-radius: 26px;
+  padding: 40px 30px;
+  margin: 20px 0;
+  text-align: center;
+  box-shadow: 0 40px 90px rgba(0,0,0,0.25);
+  transition: transform 0.5s ease, opacity 0.5s ease;
+  position: relative;
+}
+
+.progress { height: 16px; border-radius: 12px; overflow: hidden; }
+.progress-bar { background: linear-gradient(90deg, #7e5bef, #a18eff); }
+
+.timer-circle {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 25px auto;
+  background: rgba(126,91,239,0.3);
+  box-shadow: 0 0 30px rgba(126,91,239,0.6);
+}
+
+.floating-controls {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(15px);
+  padding: 12px 0;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  z-index: 100;
+}
+
+.floating-controls button {
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  font-size: 1.5rem;
+  color: #fff;
+  border: none;
+  background: rgba(126,91,239,0.7);
+}
+
+</style>
+</head>
+
+<body>
+
+{% include 'navbar.html' %}
+
+<div class="container">
+  <h2 class="text-center mb-2" id="recipeTitle"></h2>
+  <p class="text-center text-light" id="recipeCalories"></p>
+
+  <!-- Dish Image -->
+  <div class="text-center mb-3">
+    <img id="dishImage" src="" class="img-fluid rounded-4 shadow" style="max-height:250px;">
+  </div>
+
+  <div class="progress mb-4">
+    <div class="progress-bar" id="progressBar" style="width:0%"></div>
+  </div>
+
+  <div class="step-card" id="stepCard">
+    <h4 id="stepTitle"></h4>
+    <p id="stepDescription"></p>
+    <div class="timer-circle" id="stepTimer"></div>
+  </div>
+</div>
+
+<div class="floating-controls">
+  <button onclick="pauseStep()"><i class="bi bi-pause-fill"></i></button>
+  <button onclick="repeatStep()"><i class="bi bi-arrow-clockwise"></i></button>
+  <button onclick="nextStep()"><i class="bi bi-arrow-right"></i></button>
+</div>
+
+<script>
+const recipe = JSON.parse(sessionStorage.getItem("recipe"));
+if (!recipe) {
+  document.body.innerHTML = "<h2 style='color:white;text-align:center'>No recipe found</h2>";
+  throw new Error("No recipe");
+}
+
+document.getElementById("recipeTitle").innerText = recipe.name;
+document.getElementById("recipeCalories").innerText = `Calories: ${recipe.calories} kcal`;
+
+// AUTO IMAGE FROM NAME
+const imagePath = `/static/images/${recipe.name.replace(/ /g,'_').toLowerCase()}.jpg`;
+const img = document.getElementById("dishImage");
+img.src = imagePath;
+
+// fallback if image not found
+img.onerror = function(){
+  this.src = "/static/images/default.jpg";
+};
+
+const steps = recipe.steps.map((s,i)=>({
+  title:`Step ${i+1}`,
+  description:s.description,
+  duration:s.time
+}));
+
+let currentStep=0;
+let timer;
+let remainingTime=steps[0].duration;
+let isPaused=false;
+
+function formatTime(s){
+  const m=Math.floor(s/60);
+  const sec=s%60;
+  return `${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
+}
+
+function updateStep(){
+  document.getElementById("stepTitle").innerText=steps[currentStep].title;
+  document.getElementById("stepDescription").innerText=steps[currentStep].description;
+  remainingTime=steps[currentStep].duration;
+  document.getElementById("stepTimer").innerText=formatTime(remainingTime);
+  updateProgress();
+  startTimer();
+}
+
+function startTimer(){
+  clearInterval(timer);
+  timer=setInterval(()=>{
+    if(!isPaused){
+      remainingTime--;
+      document.getElementById("stepTimer").innerText=formatTime(remainingTime);
+      if(remainingTime<=0){
+        clearInterval(timer);
+        nextStep();
+      }
+    }
+  },1000);
+}
+
+function nextStep(){
+  if(currentStep<steps.length-1){
+    currentStep++;
+    updateStep();
+  } else {
+    document.getElementById("stepCard").innerHTML=`
+  <h3>🎉 Recipe Completed!</h3>
+  <p>Enjoy your meal 😊</p>
+
+  <div class="mt-3">
+      <input type="file" id="memoryImage" accept="image/*" class="form-control mb-2">
+
+      <textarea id="memoryNote" class="form-control mb-2" 
+        placeholder="Write a small note about this dish..."></textarea>
+
+      <button class="btn btn-success" onclick="saveToMemories()">
+        💾 Save to Memories
+      </button>
+  </div>
+`;
+
+    document.getElementById("progressBar").style.width="100%";
+  }
+}
+
+function pauseStep(){ isPaused=!isPaused; }
+function repeatStep(){ updateStep(); }
+
+function updateProgress(){
+  const p=(currentStep/steps.length)*100;
+  document.getElementById("progressBar").style.width=p+"%";
+}
+
+function saveToMemories(){
+    const fileInput = document.getElementById("memoryImage");
+    const note = document.getElementById("memoryNote").value;
+
+    if(fileInput.files.length === 0){
+        alert("Please upload an image of your dish!");
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append("name", recipe.name);
+    formData.append("calories", recipe.calories);
+    formData.append("ingredients", JSON.stringify(recipe.ingredients));
+    formData.append("note", note);
+    formData.append("image", fileInput.files[0]);
+
+    fetch("/save-memory", {
+        method: "POST",
+        body: formData
+    }).then(() => {
+        window.location.href = "/memories-page";
+    });
+}
+
+
+
+updateStep();
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Login | Cook & Connect</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    * { font-family: 'Poppins', sans-serif; }
+    html, body { height: 100%; margin: 0; }
+
+    body {
+      background: linear-gradient(135deg, rgba(43,16,85,0.85), rgba(28,5,34,0.85)),
+                  url('https://cdn.shopify.com/s/files/1/0076/3147/0662/files/Food_Photography___How_to_Take_Unique_and_Creative_Food_Photos_17.jpg?v=1661151509');
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: background 0.5s;
+      color: #fff;
+    }
+
+    body.dark { background: #121212; }
+
+    .form-card {
+      background: rgba(255, 255, 255, 0.14);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 26px;
+      padding: 40px 30px;
+      width: 90%;
+      max-width: 400px;
+      box-shadow: 0 40px 90px rgba(0,0,0,0.45), inset 0 0 0 1px rgba(255,255,255,0.08);
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    h2 { font-weight: 600; margin-bottom: 5px; }
+    h5 { color: #ddd; margin-bottom: 25px; }
+
+    .form-control {
+      background: rgba(255,255,255,0.18);
+      border: none;
+      border-radius: 14px;
+      color: #fff;
+      margin-bottom: 15px;
+      padding: 12px 14px;
+      transition: all 0.3s ease;
+    }
+    .form-control:focus { outline: none; border: 2px solid #7e5bef; }
+
+    .btn-login {
+      width: 100%;
+      padding: 14px;
+      font-weight: 600;
+      border-radius: 16px;
+      background-color: #7e5bef;
+      border: none;
+      color: #fff;
+      font-size: 1rem;
+      transition: all 0.25s ease;
+      box-shadow: 0 5px 15px rgba(126,91,239,0.4);
+    }
+    .btn-login:disabled { opacity: 0.6; cursor: not-allowed; }
+    .btn-login:hover:not(:disabled) { transform: scale(1.05); box-shadow: 0 10px 30px rgba(126,91,239,0.7); }
+    .btn-login.clicked { animation: clickPop 0.25s ease forwards; }
+    @keyframes clickPop {
+      0% { transform: scale(1); box-shadow: 0 5px 15px rgba(126,91,239,0.4); }
+      50% { transform: scale(1.15); box-shadow: 0 15px 40px rgba(126,91,239,0.9); }
+      100% { transform: scale(1.05); box-shadow: 0 10px 30px rgba(126,91,239,0.7); }
+    }
+
+    .toggle-dark {
+      margin-top: 15px;
+      background: rgba(255,255,255,0.18);
+      border: none;
+      color: #fff;
+      border-radius: 14px;
+      padding: 10px 12px;
+      transition: all 0.3s ease;
+    }
+    .toggle-dark:hover { background: rgba(126,91,239,0.3); }
+
+    a { text-decoration: none; color: #7e5bef; transition: color 0.3s; }
+    a:hover { color: #fff; }
+
+    .form-check-label { color: #fff; }
+    .required { border: 2px solid #ff4d4f !important; }
+  </style>
+</head>
+<body>
+  
+
+
+
+<div class="form-card">
+  <h2>Cook & Connect</h2>
+  <h5>Login to Your Account</h5>
+
+  <input type="email" id="email" class="form-control" placeholder="Email" required>
+  <input type="password" id="password" class="form-control" placeholder="Password" required>
+
+  <!-- REMEMBER ME -->
+  <div class="form-check text-start mb-3">
+    <input class="form-check-input" type="checkbox" id="rememberMe">
+    <label class="form-check-label" for="rememberMe">Remember Me</label>
+  </div>
+<button class="btn-login" id="loginBtn">Login</button>
+
+<p class="mt-2">
+  <a href="/forgot-password">Forgot Password?</a>
+</p>
+
+<p class="mt-3">Don't have an account? <a href="/signup-page">Sign Up</a></p>
+
+</p>
+
+  
+  
+
+  
+  <button class="toggle-dark" onclick="toggleDark()">
+    <i class="bi bi-moon-stars"></i> Dark Mode
+  </button>
+</div>
+
+<script>
+function toggleDark() {
+  document.body.classList.toggle("dark");
+}
+
+const loginBtn = document.getElementById("loginBtn");
+
+loginBtn.addEventListener("click", () => {
+  const emailInput = document.getElementById("email");
+  const passwordInput = document.getElementById("password");
+
+  const email = emailInput.value.trim();
+  const password = passwordInput.value.trim();
+
+  let valid = true;
+
+  if (!email) { emailInput.classList.add("required"); valid = false; }
+  else { emailInput.classList.remove("required"); }
+
+  if (!password) { passwordInput.classList.add("required"); valid = false; }
+  else { passwordInput.classList.remove("required"); }
+
+  if (!valid) return;
+
+  loginBtn.classList.add("clicked");
+  setTimeout(() => loginBtn.classList.remove("clicked"), 250);
+
+  fetch("/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, password })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.message) {
+      window.location.href = "/home";   // ✅ ONLY CORRECT REDIRECT
+    } else {
+      alert(data.error || "Login failed");
+    }
+  })
+  .catch(err => {
+    console.error(err);
+    alert("Server error");
+  });
+});
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Home | Cook & Connect</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+  <style>
+    * { font-family: 'Poppins', sans-serif; }
+    html, body { height: 100%; margin: 0; }
+
+    body {
+      background:
+        linear-gradient(135deg, rgba(43,16,85,0.85), rgba(28,5,34,0.85)),
+        url('https://images.unsplash.com/photo-1556911220-e15b29be8c8f');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+    }
+
+    /* 🍔 Hamburger */
+    .menu-btn {
+      position: fixed;
+      top: 18px;
+      left: 18px;
+      z-index: 1050;
+      background: rgba(255,255,255,0.25);
+      border: none;
+      border-radius: 12px;
+      padding: 8px 12px;
+      color: #fff;
+      backdrop-filter: blur(10px);
+    }
+
+    .offcanvas {
+      background: rgba(20,10,40,0.95);
+      color: #fff;
+    }
+
+    .offcanvas a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .offcanvas a:hover { color: #7e5bef; }
+
+    .card-container {
+      background: rgba(255, 255, 255, 0.14);
+      backdrop-filter: blur(20px);
+      border-radius: 26px;
+      padding: 38px 32px;
+      width: 92%;
+      max-width: 540px;
+      box-shadow: 0 40px 90px rgba(0,0,0,0.45);
+      text-align: center;
+      position: relative;
+    }
+
+    #ingredient-input {
+      width: 100%;
+      height: 56px;
+      padding: 0 16px;
+      border-radius: 14px;
+      border: none;
+      background: rgba(255,255,255,0.18);
+      color: #fff;
+    }
+
+    /* 🔍 Suggestions */
+    #suggestions-box {
+      position: absolute;
+      top: 115px;
+      width: calc(100% - 64px);
+      background: #1e1438;
+      border-radius: 14px;
+      max-height: 160px;
+      overflow-y: auto;
+      display: none;
+      z-index: 1000;
+      text-align: left;
+    }
+
+    #suggestions-box div {
+      padding: 10px 14px;
+      cursor: pointer;
+    }
+
+    #suggestions-box div:hover {
+      background: rgba(126,91,239,0.4);
+    }
+
+    #ingredient-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 12px 0;
+    }
+
+    .ingredient-chip {
+      background: #7e5bef;
+      padding: 6px 10px;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      display: flex;
+      gap: 6px;
+    }
+
+    .btn-generate {
+      width: 100%;
+      padding: 14px;
+      border-radius: 16px;
+      background: #7e5bef;
+      color: #fff;
+      border: none;
+      font-weight: 600;
+      margin-top: 10px;
+    }
+
+    #detect-status {
+      margin-top: 10px;
+      color: #ffd966;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+
+<body>
+{% include 'navbar.html' %}
+<!-- 🍔 Hamburger Button -->
+<button class="menu-btn" data-bs-toggle="offcanvas" data-bs-target="#sideNav">
+  <i class="bi bi-list fs-4"></i>
+</button>
+
+<!-- 📂 Side Nav -->
+<div class="offcanvas offcanvas-start" id="sideNav">
+  <div class="offcanvas-header">
+    <h5>🍳 Cook & Connect</h5>
+    <button class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+  </div>
+  <div class="offcanvas-body">
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item bg-transparent"><a href="/home">Home</a></li>
+      <li class="list-group-item bg-transparent"><a href="/explore">Explore</a></li>
+      <li class="list-group-item bg-transparent"><a href="/recipe">Recipe</a></li>
+      <li class="list-group-item bg-transparent"><a href="/cooking">Cooking</a></li>
+      <li class="list-group-item bg-transparent"><a href="/memories-page">Memories</a></li>
+      <li class="list-group-item bg-transparent"><a href="/analytics-page">Analytics</a></li>
+      <li class="list-group-item bg-transparent"><a href="/account">Account</a></li>
+      <li class="list-group-item bg-transparent"><a href="/logout">Logout</a></li>
+    </ul>
+  </div>
+</div>
+
+<!-- 🧠 Main Card -->
+<div class="card-container">
+  <h2>What’s in your kitchen?</h2>
+
+  <input id="ingredient-input"
+         placeholder="Type ingredient & press Enter"
+         oninput="showSuggestions(this.value)">
+  <div id="suggestions-box"></div>
+
+  <div id="ingredient-chips"></div>
+
+  <input type="file" class="form-control mb-2" id="imageInput">
+  <p id="detect-status">No image uploaded yet</p>
+
+  <select id="timeSelect" class="form-select mb-2">
+    <option selected disabled>Cooking Time</option>
+    <option>Under 15 min</option>
+    <option>30 min</option>
+    <option>1 hour</option>
+  </select>
+
+  <select id="difficultySelect" class="form-select mb-3">
+    <option selected disabled>Difficulty</option>
+    <option>Easy</option>
+    <option>Medium</option>
+    <option>Hard</option>
+  </select>
+
+  <button class="btn-generate" onclick="generateRecipe()">Generate Recipe</button>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+const input = document.getElementById("ingredient-input");
+const chips = document.getElementById("ingredient-chips");
+const suggestionsBox = document.getElementById("suggestions-box");
+
+const INGREDIENTS = [
+  "Tomato","Onion","Potato","Carrot","Capsicum",
+  "Spinach","Mushroom","Paneer","Cheese",
+  "Garlic","Ginger","Milk","Butter",
+  "Chicken","Fish","Egg","Rice","Wheat","Salt","Chillipowder"
+];
+
+input.addEventListener("keydown", e => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    addIngredient(input.value.trim());
+  }
+});
+
+function showSuggestions(value) {
+  suggestionsBox.innerHTML = "";
+  if (!value) { suggestionsBox.style.display = "none"; return; }
+
+  const matches = INGREDIENTS.filter(i =>
+    i.toLowerCase().startsWith(value.toLowerCase())
+  );
+
+  if (!matches.length) { suggestionsBox.style.display = "none"; return; }
+
+  matches.forEach(item => {
+    const div = document.createElement("div");
+    div.textContent = item;
+    div.onclick = () => addIngredient(item);
+    suggestionsBox.appendChild(div);
+  });
+
+  suggestionsBox.style.display = "block";
+}
+
+function addIngredient(value) {
+  if (!value) return;
+
+  const exists = [...chips.children].some(
+    c => c.dataset.value === value.toLowerCase()
+  );
+  if (exists) return;
+
+  const chip = document.createElement("span");
+  chip.className = "ingredient-chip";
+  chip.dataset.value = value.toLowerCase();
+  chip.innerHTML = `${value} <i class="bi bi-x-circle"></i>`;
+  chip.querySelector("i").onclick = () => chip.remove();
+
+  chips.appendChild(chip);
+  input.value = "";
+  suggestionsBox.style.display = "none";
+}
+
+function generateRecipe() {
+  const ingredients = [...chips.children].map(c => c.dataset.value);
+
+  if (!ingredients.length) {
+    alert("Add ingredients first");
+    return;
+  }
+
+  // Store ingredients only
+  sessionStorage.setItem("ingredients", JSON.stringify(ingredients));
+
+  // Go to recipe page (dish selection happens there)
+  window.location.href = "/recipe";
+}
+
+</script>
+
+<script>
+const imageInput = document.getElementById("imageInput");
+const detectStatus = document.getElementById("detect-status");
+
+imageInput.addEventListener("change", () => {
+  const file = imageInput.files[0];
+  if (!file) return;
+
+  detectStatus.innerText = "Running YOLO detection...";
+
+  const formData = new FormData();
+  formData.append("image", file);
+
+  fetch("/detect-ingredients", {
+    method: "POST",
+    body: formData
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (!data.ingredients || !data.ingredients.length) {
+      detectStatus.innerText = "No ingredients detected (manual input recommended)";
+      return;
+    }
+
+    detectStatus.innerText = "Detected: " + data.ingredients.join(", ");
+    data.ingredients.forEach(addIngredient);
+  })
+  .catch(err => {
+    console.error(err);
+    detectStatus.innerText = "YOLO detection failed";
+  });
+});
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,308 @@
+[
+  {
+    "id": 1,
+    "name": "Egg Bhurji",
+    "preview": "A spicy Indian-style scrambled egg cooked with onion and tomato.",
+    "ingredients": ["egg", "onion", "tomato"],
+    "steps": [
+      { "text": "Finely chop onion and tomato", "time": 180 },
+      { "text": "Heat a pan and cook onion until soft", "time": 300 },
+      { "text": "Add tomato and cook until pulpy", "time": 240 },
+      { "text": "Beat eggs and pour into the pan", "time": 120 },
+      { "text": "Stir continuously until eggs are fully cooked", "time": 180 }
+    ],
+    "calories": 280,
+    "difficulty": "Easy",
+    "time": 20
+  },
+  {
+    "id": 2,
+    "name": "Masala Omelette",
+    "preview": "A fluffy omelette mixed with onion and spices, perfect for a quick meal.",
+    "ingredients": ["egg", "onion"],
+    "steps": [
+      { "text": "Finely chop onion", "time": 120 },
+      { "text": "Beat eggs in a bowl", "time": 120 },
+      { "text": "Mix chopped onion into eggs", "time": 60 },
+      { "text": "Heat pan and pour egg mixture", "time": 180 },
+      { "text": "Cook omelette on both sides until set", "time": 240 }
+    ],
+    "calories": 240,
+    "difficulty": "Easy",
+    "time": 15
+  },
+  {
+    "id": 3,
+    "name": "Aloo Fry",
+    "preview": "Crispy pan-fried potatoes cooked with onion for a simple comfort dish.",
+    "ingredients": ["potato", "onion"],
+    "steps": [
+      { "text": "Peel and slice potatoes", "time": 180 },
+      { "text": "Chop onion finely", "time": 120 },
+      { "text": "Heat pan and add potatoes", "time": 240 },
+      { "text": "Cook potatoes until crisp", "time": 420 },
+      { "text": "Add onion and cook until golden", "time": 240 }
+    ],
+    "calories": 260,
+    "difficulty": "Easy",
+    "time": 25
+  },
+  {
+    "id": 4,
+    "name": "Aloo Tomato Curry",
+    "preview": "A mild curry made with potatoes simmered in a tomato-based gravy.",
+    "ingredients": ["potato", "tomato"],
+    "steps": [
+      { "text": "Peel and cube potatoes", "time": 180 },
+      { "text": "Chop tomatoes finely", "time": 120 },
+      { "text": "Boil potatoes until half cooked", "time": 420 },
+      { "text": "Cook tomato until soft", "time": 240 },
+      { "text": "Add potatoes and simmer together", "time": 300 }
+    ],
+    "calories": 270,
+    "difficulty": "Easy",
+    "time": 30
+  },
+  {
+    "id": 5,
+    "name": "Jeera Rice Style Plain Rice",
+    "preview": "Light and fluffy plain rice cooked perfectly for everyday meals.",
+    "ingredients": ["rice"],
+    "steps": [
+      { "text": "Wash rice until water runs clear", "time": 180 },
+      { "text": "Boil water in a pot", "time": 300 },
+      { "text": "Add rice and cook until soft", "time": 600 },
+      { "text": "Drain excess water and fluff rice", "time": 120 }
+    ],
+    "calories": 220,
+    "difficulty": "Easy",
+    "time": 20
+  },
+  {
+    "id": 6,
+    "name": "Vegetable Pulao",
+    "preview": "A fragrant rice dish cooked with mixed vegetables and mild spices.",
+    "ingredients": ["rice", "carrot", "beans"],
+    "steps": [
+      { "text": "Wash rice and vegetables", "time": 180 },
+      { "text": "Chop vegetables into small pieces", "time": 180 },
+      { "text": "Boil rice halfway", "time": 420 },
+      { "text": "Add vegetables and cook together", "time": 300 },
+      { "text": "Allow rice to absorb remaining moisture", "time": 240 }
+    ],
+    "calories": 280,
+    "difficulty": "Medium",
+    "time": 30
+  },
+  {
+    "id": 7,
+    "name": "Paneer Bhurji",
+    "preview": "Soft crumbled paneer cooked with onion and tomato in a homestyle dish.",
+    "ingredients": ["paneer", "onion", "tomato"],
+    "steps": [
+      { "text": "Crumble paneer using hands", "time": 120 },
+      { "text": "Chop onion and tomato finely", "time": 180 },
+      { "text": "Cook onion until soft", "time": 240 },
+      { "text": "Add tomato and cook until mushy", "time": 240 },
+      { "text": "Add paneer and mix well", "time": 180 }
+    ],
+    "calories": 320,
+    "difficulty": "Easy",
+    "time": 25
+  },
+  {
+    "id": 8,
+    "name": "Paneer Stir Fry",
+    "preview": "Quick stir-fried paneer tossed with capsicum for a light meal.",
+    "ingredients": ["paneer", "capsicum"],
+    "steps": [
+      { "text": "Cut paneer and capsicum into strips", "time": 180 },
+      { "text": "Heat pan on medium flame", "time": 180 },
+      { "text": "Add capsicum and cook", "time": 300 },
+      { "text": "Add paneer and toss gently", "time": 240 }
+    ],
+    "calories": 300,
+    "difficulty": "Easy",
+    "time": 20
+  },
+  {
+    "id": 9,
+    "name": "Tomato Rice",
+    "preview": "Tangy rice cooked with fresh tomatoes for a flavorful one-pot dish.",
+    "ingredients": ["rice", "tomato"],
+    "steps": [
+      { "text": "Wash rice thoroughly", "time": 180 },
+      { "text": "Chop tomatoes finely", "time": 120 },
+      { "text": "Cook tomato until soft", "time": 240 },
+      { "text": "Add rice and water", "time": 420 },
+      { "text": "Cook until rice is done", "time": 420 }
+    ],
+    "calories": 260,
+    "difficulty": "Easy",
+    "time": 30
+  },
+  {
+    "id": 10,
+    "name": "Vegetable Stir Fry",
+    "preview": "A quick and healthy stir fry made with fresh seasonal vegetables.",
+    "ingredients": ["carrot", "beans", "capsicum"],
+    "steps": [
+      { "text": "Wash and chop vegetables", "time": 240 },
+      { "text": "Heat pan on high flame", "time": 120 },
+      { "text": "Add vegetables and stir fry", "time": 300 },
+      { "text": "Cook until vegetables soften slightly", "time": 240 }
+    ],
+    "calories": 180,
+    "difficulty": "Easy",
+    "time": 15
+  },
+  {
+    "id": 11,
+    "name": "Chicken Fry",
+    "preview": "Pan-fried chicken cooked with onion for a rich and savory dish.",
+    "ingredients": ["chicken", "onion"],
+    "steps": [
+      { "text": "Wash chicken pieces thoroughly", "time": 180 },
+      { "text": "Chop onion finely", "time": 120 },
+      { "text": "Cook onion until light brown", "time": 300 },
+      { "text": "Add chicken and cook thoroughly", "time": 900 }
+    ],
+    "calories": 380,
+    "difficulty": "Medium",
+    "time": 35
+  },
+  {
+    "id": 12,
+    "name": "Chicken Tomato Curry",
+    "preview": "Juicy chicken simmered in a tomato-based curry with bold flavors.",
+    "ingredients": ["chicken", "tomato"],
+    "steps": [
+      { "text": "Wash chicken pieces", "time": 180 },
+      { "text": "Chop tomatoes finely", "time": 120 },
+      { "text": "Cook tomato until soft", "time": 300 },
+      { "text": "Add chicken and simmer until cooked", "time": 900 }
+    ],
+    "calories": 360,
+    "difficulty": "Medium",
+    "time": 35
+  },
+  {
+    "id": 13,
+    "name": "Egg Fried Rice Style",
+    "preview": "Simple fried rice tossed with scrambled eggs for a filling meal.",
+    "ingredients": ["egg", "rice"],
+    "steps": [
+      { "text": "Cook rice and let it cool", "time": 600 },
+      { "text": "Beat eggs in a bowl", "time": 120 },
+      { "text": "Cook eggs in a pan", "time": 180 },
+      { "text": "Add rice and mix well", "time": 300 }
+    ],
+    "calories": 300,
+    "difficulty": "Easy",
+    "time": 25
+  },
+  {
+    "id": 14,
+    "name": "Vegetable Rice",
+    "preview": "Plain rice cooked together with carrot for a mild and healthy dish.",
+    "ingredients": ["rice", "carrot"],
+    "steps": [
+      { "text": "Wash rice and carrot", "time": 180 },
+      { "text": "Chop carrot finely", "time": 120 },
+      { "text": "Boil rice halfway", "time": 420 },
+      { "text": "Add carrot and cook fully", "time": 420 }
+    ],
+    "calories": 240,
+    "difficulty": "Easy",
+    "time": 25
+  },
+  {
+    "id": 15,
+    "name": "Paneer Rice Bowl",
+    "preview": "A wholesome rice bowl topped with lightly cooked paneer cubes.",
+    "ingredients": ["paneer", "rice"],
+    "steps": [
+      { "text": "Cook rice completely", "time": 600 },
+      { "text": "Cut paneer into cubes", "time": 180 },
+      { "text": "Cook paneer lightly in pan", "time": 240 },
+      { "text": "Mix paneer with rice", "time": 120 }
+    ],
+    "calories": 330,
+    "difficulty": "Easy",
+    "time": 25
+  },
+  {
+    "id": 16,
+    "name": "Egg Curry Style",
+    "preview": "Boiled eggs simmered gently in a light tomato-based curry.",
+    "ingredients": ["egg", "tomato"],
+    "steps": [
+      { "text": "Boil eggs and peel shell", "time": 600 },
+      { "text": "Chop tomato finely", "time": 120 },
+      { "text": "Cook tomato until soft", "time": 300 },
+      { "text": "Add eggs and simmer together", "time": 300 }
+    ],
+    "calories": 270,
+    "difficulty": "Easy",
+    "time": 25
+  },
+  {
+    "id": 17,
+    "name": "Chicken Rice",
+    "preview": "Hearty rice cooked together with chicken for a complete meal.",
+    "ingredients": ["chicken", "rice"],
+    "steps": [
+      { "text": "Cook rice halfway", "time": 420 },
+      { "text": "Wash chicken pieces", "time": 180 },
+      { "text": "Cook chicken in pan", "time": 900 },
+      { "text": "Add rice and cook together", "time": 420 }
+    ],
+    "calories": 420,
+    "difficulty": "Medium",
+    "time": 40
+  },
+  {
+    "id": 18,
+    "name": "Vegetable Curry Style",
+    "preview": "Mixed vegetables cooked in a light curry for a comforting dish.",
+    "ingredients": ["carrot", "beans", "tomato"],
+    "steps": [
+      { "text": "Wash and chop vegetables", "time": 240 },
+      { "text": "Cook tomato until soft", "time": 300 },
+      { "text": "Add vegetables and cook until tender", "time": 600 }
+    ],
+    "calories": 210,
+    "difficulty": "Easy",
+    "time": 30
+  },
+  {
+    "id": 19,
+    "name": "Aloo Paneer Mix",
+    "preview": "Potatoes and paneer cooked together for a rich and satisfying dish.",
+    "ingredients": ["potato", "paneer"],
+    "steps": [
+      { "text": "Boil and cube potatoes", "time": 600 },
+      { "text": "Cut paneer into cubes", "time": 180 },
+      { "text": "Cook potatoes in pan", "time": 300 },
+      { "text": "Add paneer and mix gently", "time": 180 }
+    ],
+    "calories": 340,
+    "difficulty": "Easy",
+    "time": 30
+  },
+  {
+    "id": 20,
+    "name": "Veg Omelette Style",
+    "preview": "A quick omelette made with eggs and grated vegetables.",
+    "ingredients": ["egg", "carrot"],
+    "steps": [
+      { "text": "Grate carrot finely", "time": 120 },
+      { "text": "Beat eggs in a bowl", "time": 120 },
+      { "text": "Mix carrot into eggs", "time": 60 },
+      { "text": "Cook omelette in pan", "time": 240 }
+    ],
+    "calories": 230,
+    "difficulty": "Easy",
+    "time": 15
+  }
+]
