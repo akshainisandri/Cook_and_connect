@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Account | Cook & Connect</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+  <style>
+    body{
+      font-family: 'Poppins', sans-serif;
+      min-height:100vh;
+      background: linear-gradient(135deg, rgba(43,16,85,0.85), rgba(126,91,239,0.85)),
+                  url('https://images.unsplash.com/photo-1556911220-e15b29be8c8f');
+      background-size:cover;
+      color:#fff;
+    }
+
+    .glass-card{
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(16px);
+      border-radius: 22px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .profile-img{
+      width:90px;
+      height:90px;
+      border-radius:50%;
+      object-fit:cover;
+      border:2px solid #fff;
+    }
+
+    .tag{
+      background: rgba(255,255,255,0.25);
+      padding:6px 12px;
+      border-radius:20px;
+      margin:4px;
+      display:inline-block;
+    }
+
+    /* MODAL FIX */
+    .modal-content{
+      background:#fff !important;
+      color:#000 !important;
+      border-radius:18px;
+    }
+  </style>
+</head>
+
+<body class="container py-4">
+
+{% include 'navbar.html' %}
+
+
+<!-- ================= PROFILE ================= -->
+<div class="glass-card d-flex justify-content-between align-items-center">
+  <div class="d-flex align-items-center">
+    {% if user.profile_pic and user.profile_pic != "default.png" %}
+  <img src="{{ url_for('uploaded_file', filename=user.profile_pic) }}" class="profile-img me-3">
+{% else %}
+  <img src="{{ url_for('static', filename='default.png') }}" class="profile-img me-3">
+{% endif %}
+
+    <div>
+      <h5>{{ user.name }}</h5>
+      <small>{{ user.email }}</small>
+    </div>
+  </div>
+  <button class="btn btn-light" data-bs-toggle="modal" data-bs-target="#profilePicModal">
+    <i class="bi bi-camera"></i>
+  </button>
+</div>
+
+<!-- ================= PROFILE PIC MODAL ================= -->
+<div class="modal fade" id="profilePicModal">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5>Update Profile Picture</h5>
+        <button class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <input type="file" id="profilePicInput" class="form-control mb-3">
+        <button class="btn btn-danger w-100" onclick="uploadProfilePic()">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= ACCOUNT INFO ================= -->
+<div class="glass-card">
+  <h6><i class="bi bi-person-badge"></i> Account Information</h6>
+  <p class="mb-1">📧 {{ user.email }}</p>
+  <p class="mb-0">👤 Registered User</p>
+</div>
+
+<!-- ================= COOKING PREFERENCES ================= -->
+<div class="glass-card">
+  <h6><i class="bi bi-sliders"></i> Cooking Preferences</h6>
+
+  <p class="mb-1">🥗 Diet: <strong>{{ user.diet }}</strong></p>
+
+  <p class="mb-1">🌍 Preferred Cuisines:</p>
+  <div class="mb-2">
+    {% for c in user.cuisines.split(',') %}
+      <span class="tag">{{ c }}</span>
+    {% endfor %}
+  </div>
+
+  <p class="mb-1">⏱ Cooking Time: <strong>{{ user.cooking_time or "Under 30 mins" }}</strong></p>
+  <p class="mb-0">🔥 Difficulty: <strong>{{ user.difficulty or "Beginner" }}</strong></p>
+
+  <button class="btn btn-outline-light mt-3" data-bs-toggle="modal" data-bs-target="#editModal">
+    Edit Preferences
+  </button>
+</div>
+
+<!-- ================= EDIT PREFERENCES MODAL ================= -->
+<div class="modal fade" id="editModal">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5>Edit Preferences</h5>
+        <button class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+        <label class="form-label">Diet</label>
+        <select id="editDiet" class="form-select mb-3">
+          <option {% if user.diet=="Veg 🌱" %}selected{% endif %}>Veg 🌱</option>
+          <option {% if user.diet=="Non-Veg 🍗" %}selected{% endif %}>Non-Veg 🍗</option>
+          <option {% if user.diet=="Vegan 🌿" %}selected{% endif %}>Vegan 🌿</option>
+        </select>
+
+        <label class="form-label">Cooking Time</label>
+        <select id="editTime" class="form-select mb-3">
+          <option>Under 15 mins</option>
+          <option selected>Under 30 mins</option>
+          <option>Under 45 mins</option>
+        </select>
+
+        <label class="form-label">Difficulty</label>
+        <select id="editDifficulty" class="form-select mb-3">
+          <option>Beginner</option>
+          <option>Intermediate</option>
+          <option>Advanced</option>
+        </select>
+
+        <label class="form-label">Preferred Cuisines</label>
+        {% set cuisines=user.cuisines.split(',') %}
+        <div class="form-check"><input class="form-check-input" type="checkbox" value="Indian 🇮🇳" {% if "Indian 🇮🇳" in cuisines %}checked{% endif %}> <label>Indian 🇮🇳</label></div>
+        <div class="form-check"><input class="form-check-input" type="checkbox" value="Italian 🇮🇹" {% if "Italian 🇮🇹" in cuisines %}checked{% endif %}> <label>Italian 🇮🇹</label></div>
+        <div class="form-check"><input class="form-check-input" type="checkbox" value="Chinese 🇨🇳" {% if "Chinese 🇨🇳" in cuisines %}checked{% endif %}> <label>Chinese 🇨🇳</label></div>
+
+        <button class="btn btn-danger w-100 mt-4" onclick="savePreferences()">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= SECURITY ================= -->
+<div class="glass-card">
+  <h6><i class="bi bi-shield-lock"></i> Security</h6>
+  <button class="btn btn-outline-light w-100" data-bs-toggle="modal" data-bs-target="#passwordModal">
+    Change Password
+  </button>
+</div>
+
+<!-- ================= CHANGE PASSWORD MODAL ================= -->
+<div class="modal fade" id="passwordModal">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5>Change Password</h5>
+        <button class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <input id="oldPass" class="form-control mb-2" type="password" placeholder="Old password">
+        <input id="newPass" class="form-control mb-2" type="password" placeholder="New password">
+        <button class="btn btn-danger w-100" onclick="changePassword()">Update</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= LOGOUT ================= -->
+<div class="d-grid mt-3">
+  <a href="/logout" class="btn btn-danger">Logout</a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+function uploadProfilePic(){
+  const f=document.getElementById("profilePicInput").files[0];
+  const fd=new FormData();
+  fd.append("image",f);
+  fetch("/upload-profile-pic",{method:"POST",body:fd})
+  .then(()=>location.reload());
+}
+
+function savePreferences(){
+  let cuisines=[];
+  document.querySelectorAll("input[type=checkbox]:checked").forEach(c=>cuisines.push(c.value));
+  fetch("/update-preferences",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({
+      diet:editDiet.value,
+      cuisines:cuisines.join(","),
+      cooking_time:editTime.value,
+      difficulty:editDifficulty.value
+    })
+  }).then(()=>location.reload());
+}
+
+function changePassword(){
+  fetch("/change-password",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({old:oldPass.value,new:newPass.value})
+  }).then(()=>alert("Password updated"));
+}
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

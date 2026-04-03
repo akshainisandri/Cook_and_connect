@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ friend.name }} | Profile</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<style>
+body{
+  background: linear-gradient(135deg,#2b1055,#1c0522);
+  color:white;
+  padding:40px 20px;
+  min-height:100vh;
+}
+
+.profile-card{
+  background: rgba(255,255,255,0.10);
+  border-radius:25px;
+  padding:30px;
+  margin-bottom:30px;
+  box-shadow:0 20px 50px rgba(0,0,0,0.4);
+}
+
+.avatar{
+  width:120px;
+  height:120px;
+  border-radius:50%;
+  object-fit:cover;
+  border:4px solid #2b1055;
+}
+
+.memory-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+  gap:20px;
+}
+
+.memory-card{
+  background: rgba(255,255,255,0.08);
+  border-radius:20px;
+  padding:15px;
+  transition:0.3s;
+}
+
+.memory-card:hover{
+  transform:translateY(-5px);
+  box-shadow:0 10px 30px rgba(0,0,0,0.4);
+}
+
+.memory-img{
+  width:100%;
+  height:180px;
+  object-fit:cover;
+  border-radius:15px;
+  margin-bottom:10px;
+}
+.like-btn{
+  cursor:pointer;
+  font-size:1.1rem;
+  transition:0.2s;
+}
+
+.like-btn:hover{
+  transform:scale(1.2);
+}
+</style>
+</head>
+<body>
+{% include 'navbar.html' %}
+<a href="/friends-page" class="btn btn-outline-light mb-4">
+ 
+</a>
+
+<!-- PROFILE INFO -->
+<div class="profile-card d-flex align-items-center gap-4">
+
+  {% if friend.profile_pic and friend.profile_pic != "default.png" %}
+  <img src="{{ url_for('uploaded_file', filename=friend.profile_pic) }}" class="avatar">
+{% else %}
+  <img src="{{ url_for('static', filename='default.png') }}" class="avatar">
+{% endif %}
+
+  <div>
+    <h3>{{ friend.name }}</h3>
+    <p class="mb-1"><strong>{{ memories|length }}</strong> Memories</p>
+    <p class="mb-0"><strong>{{ friend_count }}</strong> Friends</p>
+  </div>
+
+</div>
+
+<!-- MEMORIES -->
+<div class="profile-card">
+  <h5 class="mb-4"><i class="bi bi-camera"></i> Cooking Memories</h5>
+
+  {% if memories %}
+  <div class="memory-grid">
+    {% for m in memories %}
+    <div class="memory-card">
+
+      {% if m.image %}
+      <img src="{{ m.image }}" class="memory-img">
+      {% endif %}
+
+      <h6>{{ m.name }}</h6>
+      <p class="mb-1">🔥 {{ m.calories }} kcal</p>
+
+      {% if m.note %}
+      <p class="mb-1">{{ m.note }}</p>
+      {% endif %}
+
+      <small>{{ m.cooked_at.strftime("%d %b %Y, %I:%M %p") }}</small>
+
+<hr>
+
+<!-- LIKE BUTTON -->
+<div class="mt-2">
+  <span class="like-btn" onclick="toggleLike('{{ m.id }}')">
+    ❤️ {{ m.likes|length }}
+  </span>
+</div>
+
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p>No memories yet.</p>
+  {% endif %}
+</div>
+<script>
+function toggleLike(memoryId){
+  fetch(`/toggle-like/${memoryId}`, {
+    method: "POST"
+  })
+  .then(res => res.json())
+  .then(() => location.reload());
+}
+</script>
+<script>
+function toggleLike(memoryId){
+  fetch(`/toggle-like/${memoryId}`, {
+    method: "POST"
+  })
+  .then(res => res.json())
+  .then(() => location.reload());
+}
+</script>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</html>
